@@ -5,6 +5,8 @@ const Intern = require('./lib/Intern');
 
 // create an empty array to store all generated employees
 const employeeList = [];
+// prompt for manager info first. this only happens once per team
+let employee = new Manager();
 
 const promptMenu = () => {
     inquirer.prompt({
@@ -17,19 +19,13 @@ const promptMenu = () => {
         .then(({ role }) => {
             if (role === 'Engineer') {
                 // create Engineer obj and run user prompts
-                employee = new Engineer().getName().getId().getEmail().getRole().getGithub();
-                // add new employee to list
-                employeeList.push(employee);
-                // go back to menu
-                return promptMenu();
+                employee = new Engineer();
+                buildTeam();
             }
             else if (role === 'Intern') {
                 // create Intern obj and run user prompts
-                employee = new Intern().getName().getId().getEmail().getRole().getSchool();
-                // add new employee to list
-                employeeList.push(employee);
-                // go back to menu
-                return promptMenu();
+                employee = new Intern();
+                buildTeam();
             }
             else {
                 console.log("Your team is complete.")
@@ -39,13 +35,52 @@ const promptMenu = () => {
         })
 }
 
-const startTeam = () => {
-    // prompt for manager info first. this only happens once per team
-    let employee = new Manager().getName();
-    // push manager to employee array
-    employeeList.push(employee);
-    // go to menu (prompt user to add engineers or interns)
-    promptMenu();
+const buildTeam = () => {
+    const role = employee.getRole();
+    // create questions array with common questions. reset questions each run through
+    const questions = [employee.getName(role), employee.getId(role), employee.getEmail(role)];
+
+    inquirer
+        .prompt(questions)
+        .then(({name, id, email}) => {
+            this.name = name;
+            this.id = id;
+            this.email = email;
+
+            if (role === "Manager") {
+                inquirer
+                    .prompt(employee.getOfficeNumber())
+                    .then(({ officeNumber }) => {
+                        this.officeNumber = officeNumber;   
+                        // push to employee array
+                        employeeList.push(employee);
+                        // go to menu (prompt user to add engineers or interns)
+                        promptMenu();
+                    })
+            }
+            else if (role === "Engineer") {
+                inquirer
+                    .prompt(employee.getGithub())
+                    .then(({ github }) => {
+                        this.github = github;
+                        // push to employee array
+                        employeeList.push(employee);
+                        // go to menu (prompt user to add engineers or interns)
+                        promptMenu();
+                    })
+            }
+            else if (role === "Intern") {
+                inquirer
+                    .prompt(employee.getSchool())
+                    .then(({ school }) => {
+                        this.school = school;
+                        // push to employee array
+                        employeeList.push(employee);
+                        // go to menu (prompt user to add engineers or interns)
+                        promptMenu();
+                    })
+            }
+        })
 };
 
-startTeam();
+buildTeam();
