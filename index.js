@@ -17,7 +17,7 @@ const promptMenu = () => {
         .then(({ role }) => {
             if (role === 'Engineer') {
                 // create Engineer obj and run user prompts
-                employee = new Engineer().getBasics().getGithub();
+                employee = new Engineer().getName().getId().getEmail().getRole().getGithub();
                 // add new employee to list
                 employeeList.push(employee);
                 // go back to menu
@@ -25,7 +25,7 @@ const promptMenu = () => {
             }
             else if (role === 'Intern') {
                 // create Intern obj and run user prompts
-                employee = new Intern().getBasics().getSchool();
+                employee = new Intern().getName().getId().getEmail().getRole().getSchool();
                 // add new employee to list
                 employeeList.push(employee);
                 // go back to menu
@@ -39,13 +39,13 @@ const promptMenu = () => {
         })
 }
 
-getBasics = function() {
-    this.getName().getId().getEmail().getRole();
-}
+const startTeam = () => {
+    // prompt for manager info first. this only happens once per team
+    let employee = new Manager().getName();
+    // push manager to employee array
+    employeeList.push(employee);
+    // go to menu (prompt user to add engineers or interns)
+    promptMenu();
+};
 
-// prompt for manager info first. this only happens once per team
-let employee = new Manager().getBasics().getOfficeNumber();
-// push manager to employee array
-employeeList.push(employee);
-// go to menu (prompt user to add engineers or interns)
-promptMenu();
+startTeam();
