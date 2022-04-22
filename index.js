@@ -2,13 +2,14 @@ const inquirer = require('inquirer');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
+const generatePage = require('./src/page-template');
 
 // create an empty array to store all generated employees
 const employeeList = [];
 // prompt for manager info first. employee only happens once per team
 let employee = new Manager();
 
-const promptMenu = () => {
+function promptMenu() {
     inquirer.prompt({
             type: 'list',
             name: 'role',
@@ -30,12 +31,12 @@ const promptMenu = () => {
             else {
                 console.log("Your team is complete.")
                 console.log(employeeList)
-                return employeeList;
+                return finishTeam(employeeList);
             }
         })
 }
 
-const buildTeam = () => {
+function buildTeam () {
     const role = employee.getRole();
     // create questions array with common questions. reset questions each run through
     const questions = [employee.getName(role), employee.getId(role), employee.getEmail(role)];
@@ -81,6 +82,51 @@ const buildTeam = () => {
                     })
             }
         })
+};
+
+ 
+const finishTeam = (employeeList) => {
+    generatePage(employeeList)
+    .then(pageHtml => {
+        return new Promise((resolve, reject) => {
+            fs.writeFile('./dist/index.html', pageHtml, err => {
+                // if there's an error, reject the Promise and send the error to the Promise's `.catch()` method
+                if (err) {
+                    reject(err);
+                    // return out of the function here to make sure the Promise doesn't accidentally execute the resolve() function as well
+                    return;
+                }
+    
+                // if everything went well, resolve the Promise and send the successful data to the `.then()` method
+                resolve({
+                    ok: true,
+                    message: 'Team HTML file created!'
+                });
+            });
+        });
+    })
+    .then(writeFileResponse => {
+        console.log(writeFileResponse)
+        return new Promise((resolve, reject) => {
+            fs.copyFile('./src/style.css', './dist/style.css', err => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+    
+                resolve({
+                    ok: true,
+                    message: 'Style sheet copied successfully!'
+                })
+            })
+        })
+    })
+    .then(copyFileResponse => {
+        console.log(copyFileResponse);
+    })
+    .catch(err => {
+        console.log(err);
+    });
 };
 
 buildTeam();
