@@ -1,3 +1,4 @@
+const fs = require('fs');
 const inquirer = require('inquirer');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
@@ -86,46 +87,25 @@ function buildTeam () {
 
  
 const finishTeam = (employeeList) => {
-    generatePage(employeeList)
-    .then(pageHtml => {
-        return new Promise((resolve, reject) => {
-            fs.writeFile('./dist/index.html', pageHtml, err => {
-                // if there's an error, reject the Promise and send the error to the Promise's `.catch()` method
-                if (err) {
-                    reject(err);
-                    // return out of the function here to make sure the Promise doesn't accidentally execute the resolve() function as well
-                    return;
-                }
-    
-                // if everything went well, resolve the Promise and send the successful data to the `.then()` method
-                resolve({
-                    ok: true,
-                    message: 'Team HTML file created!'
-                });
-            });
-        });
-    })
-    .then(writeFileResponse => {
-        console.log(writeFileResponse)
-        return new Promise((resolve, reject) => {
-            fs.copyFile('./src/style.css', './dist/style.css', err => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-    
-                resolve({
-                    ok: true,
-                    message: 'Style sheet copied successfully!'
-                })
-            })
-        })
-    })
-    .then(copyFileResponse => {
-        console.log(copyFileResponse);
-    })
-    .catch(err => {
-        console.log(err);
+    let pageHtml = generatePage(employeeList)
+    fs.writeFile('./dist/index.html', pageHtml, err => {
+        // if there's an error, reject the Promise and send the error to the Promise's `.catch()` method
+        if (err) {
+            console.log(err);
+            // return out of the function here
+            return;
+        }
+
+        // if everything went well
+        console.log('Team HTML file created!')
+    });
+    fs.copyFile('./src/style.css', './dist/style.css', err => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+            console.log('Style sheet copied successfully!')
     });
 };
 
