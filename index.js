@@ -5,7 +5,7 @@ const Intern = require('./lib/Intern');
 
 // create an empty array to store all generated employees
 const employeeList = [];
-// prompt for manager info first. this only happens once per team
+// prompt for manager info first. employee only happens once per team
 let employee = new Manager();
 
 const promptMenu = () => {
@@ -43,15 +43,15 @@ const buildTeam = () => {
     inquirer
         .prompt(questions)
         .then(({name, id, email}) => {
-            this.name = name;
-            this.id = id;
-            this.email = email;
+            employee.name = name;
+            employee.id = id;
+            employee.email = email;
 
             if (role === "Manager") {
                 inquirer
                     .prompt(employee.getOfficeNumber())
                     .then(({ officeNumber }) => {
-                        this.officeNumber = officeNumber;   
+                        employee.officeNumber = officeNumber;   
                         // push to employee array
                         employeeList.push(employee);
                         // go to menu (prompt user to add engineers or interns)
@@ -62,7 +62,7 @@ const buildTeam = () => {
                 inquirer
                     .prompt(employee.getGithub())
                     .then(({ github }) => {
-                        this.github = github;
+                        employee.github = github;
                         // push to employee array
                         employeeList.push(employee);
                         // go to menu (prompt user to add engineers or interns)
@@ -73,7 +73,7 @@ const buildTeam = () => {
                 inquirer
                     .prompt(employee.getSchool())
                     .then(({ school }) => {
-                        this.school = school;
+                        employee.school = school;
                         // push to employee array
                         employeeList.push(employee);
                         // go to menu (prompt user to add engineers or interns)
