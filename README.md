@@ -4,6 +4,8 @@
   ## Description:
   Command-line application that accepts user input regarding employees to generate a Team Profile html page with information cards for each employee.
 
+https://user-images.githubusercontent.com/96707052/164865944-3e79c6c1-f1b1-47e3-9a02-2c2574261a9d.mp4
+
   ## Table of Contents
   - [Description](#description)
   - [Installation](#installation)
