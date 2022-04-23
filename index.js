@@ -7,7 +7,8 @@ const generatePage = require('./src/page-template');
 
 // create an empty array to store all generated employees
 const employeeList = [];
-// prompt for manager info first. employee only happens once per team
+// Initialize employee as manager to prompt for manager info first. 
+// This employee type only happens once per team
 let employee = new Manager();
 
 function promptMenu() {
@@ -49,6 +50,7 @@ function buildTeam () {
             employee.id = id;
             employee.email = email;
 
+            // ask questions specific to the employee type being created
             if (role === "Manager") {
                 inquirer
                     .prompt(employee.getOfficeNumber())
@@ -89,7 +91,7 @@ function buildTeam () {
 const finishTeam = (employeeList) => {
     let pageHtml = generatePage(employeeList)
     fs.writeFile('./dist/index.html', pageHtml, err => {
-        // if there's an error, reject the Promise and send the error to the Promise's `.catch()` method
+        // if there's an error, send the error to the console
         if (err) {
             console.log(err);
             // return out of the function here
@@ -105,7 +107,7 @@ const finishTeam = (employeeList) => {
             return;
         }
 
-            console.log('Style sheet copied successfully!')
+        console.log('Style sheet copied successfully!')
     });
 };
 

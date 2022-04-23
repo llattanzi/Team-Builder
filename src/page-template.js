@@ -4,6 +4,8 @@ const generateCards = employeeList => {
     let icon = '';
     let addtlInfo = '';
 
+    // for each employee in the list, get the icon associated with their role
+    // and get the role specific input to be added to their card
     return employeeList.map((employee) => {
         if (employee.role == "Manager") {
             icon = `<i class="fa-solid fa-mug-hot"></i>`;
@@ -18,6 +20,7 @@ const generateCards = employeeList => {
             addtlInfo = `School: ${employee.school}`;
         }
 
+        // create cards for each employee with their respective properties
         return `
         <div class="card bg-light m-3" style="width: 20rem;">
             <div class="card-header bg-info text-white">
